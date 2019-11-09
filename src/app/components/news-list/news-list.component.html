@@ -1,0 +1,18 @@
+<h2>{{domain}}</h2>
+<ul class="list-unstyled">
+  <li *ngFor="let item of newsListItemArr">
+
+    <div class="col-12">
+
+      <a href="{{item.url }}"><h3> {{item.title }}</h3> </a><br />
+      <img *ngIf="item.urlToImage != ''" class="img-thumbnail" src="{{item.urlToImage }}" />
+      <br />
+      {{item.content }} <br />
+      {{item.description }} <br />
+      <small><b>{{item.publishedAt }}</b>
+        {{item.author }}
+      </small>
+    </div>
+
+  </li>
+</ul>
