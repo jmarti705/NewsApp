@@ -1,43 +1,58 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { retry, catchError, map } from 'rxjs/operators';
+import { AggregateTitleService} from '../services/aggregate-title.service'
 
 @Injectable()
 
 export class NewsApiService {
 
+
   baseURL: string = 'https://newsapi.org/v2/';
   apiKey: string = 'API_KEY';
-  params : any = {apiKey : this.apiKey};
-  
+  params: any = {
+    'apiKey': this.apiKey,
+
+  };
+
 
   constructor(private http: HttpClient) { }
+
+  aggregateTitleService : AggregateTitleService = '';
 
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     })
-  }  
+  }
 
-  getTopNews() {   
-    return this.http.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=' + this.apiKey)
-    .pipe(
-      catchError(this.handleError)
-    )
+  getTopNews() {
+    this.params["country"] = 'us';
+    return this.http.get(this.baseURL + 'top-headlines', {
+      params: this.params
+    })
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 
   getSourceNews(source) {
-    return this.http.get('https://newsapi.org/v2/everything?domains=' + source + '&language=en&apiKey=' + this.apiKey)
-    .pipe(
-      catchError(this.handleError)
-    )
+    this.params.domains = source;
+    this.params.language = 'en';
+    return this.http.get( this.baseURL + 'everything', {
+      params : this.params
+    })
+      .pipe(map(data => { 
+          return data
+        })
+      )
   }
 
-   // Error handling 
-   handleError(error) {
+  // Error handling 
+  handleError(error) {
     let errorMessage = '';
-    if(error.error instanceof ErrorEvent) {
+    if (error.error instanceof ErrorEvent) {
       // Get client-side error
       errorMessage = error.error.message;
     } else {
@@ -46,6 +61,6 @@ export class NewsApiService {
     }
     window.alert(errorMessage);
     return errorMessage;
- }
+  }
 
 }

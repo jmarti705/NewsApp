@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NewsItem } from '../../models/newslistitem.model';
 import { NewsApiService } from '../../services/news-api.service'
 
-
 @Component({
   selector: 'app-news-list',
   templateUrl: './news-list.component.html',
@@ -55,10 +54,23 @@ export class NewsListComponent implements OnInit {
       console.log(data);
       data.articles.forEach(newsData => {
         this.newsItem = newsData;
-        this.newsListItemArr.push(newsData);
+        let itemSource : string = this.newsItem.source.name;
+
+        // if(this.newsListItemArr[itemSource] != undefined) {
+        //   this.newsListItemArr[itemSource].push(this.newsItem);
+        // } else {
+        //   this.newsListItemArr[itemSource]= [this.newsItem];
+        //  // this.newsListItemArr.splice(this.newsListItemArr.indexOf(itemSource), 0, this.newsItem);
+        
+        // }
+        this.newsListItemArr.push(this.newsItem);
       });
+      console.log( this.newsListItemArr);
+     
       return this.newsListItemArr
     }); 
   }
+
+
 
 }

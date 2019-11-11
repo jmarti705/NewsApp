@@ -1,18 +1,74 @@
-<h2>{{domain}}</h2>
-<ul class="list-unstyled">
-  <li *ngFor="let item of newsListItemArr">
+<div *ngFor="let item of newsListItemArr" class="row">
+  <div *ngIf="item.source.name == 'The Washington Post'" class="col-sm-4">
 
-    <div class="col-12">
 
-      <a href="{{item.url }}"><h3> {{item.title }}</h3> </a><br />
-      <img *ngIf="item.urlToImage != ''" class="img-thumbnail" src="{{item.urlToImage }}" />
-      <br />
-      {{item.content }} <br />
-      {{item.description }} <br />
-      <small><b>{{item.publishedAt }}</b>
-        {{item.author }}
-      </small>
+    <h2>{{item.source.name}}</h2>
+    <ul class="list-unstyled">
+      <li>
+
+        <div class="col-12">
+
+          <a href="{{item.url }}">
+            <h3> {{item.title }}</h3>
+          </a><br />
+          <img *ngIf="item.urlToImage != ''" class="img-thumbnail" src="{{item.urlToImage }}" />
+          <br />
+          {{item.content }} <br />
+          <!-- {{item.description }} <br /> -->
+          <small><b>{{item.publishedAt }}</b>
+            {{item.author }}
+          </small>
+        </div>
+
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="item.source.name == 'Bbc.com'" class="col-sm-4">
+
+
+      <h2>{{item.source.name}}</h2>
+      <ul class="list-unstyled">
+        <li>
+  
+          <div class="col-12">
+  
+            <a href="{{item.url }}">
+              <h3> {{item.title }}</h3>
+            </a><br />
+            <img *ngIf="item.urlToImage != ''" class="img-thumbnail" src="{{item.urlToImage }}" />
+            <br />
+            {{item.content }} <br />
+            <!-- {{item.description }} <br /> -->
+            <small><b>{{item.publishedAt }}</b>
+              {{item.author }}
+            </small>
+          </div>
+  
+        </li>
+      </ul>
     </div>
+    <div *ngIf="item.source.name == 'Fox News'" class="col-sm-4">
 
-  </li>
-</ul>
+
+        <h2>{{item.source.name}}</h2>
+        <ul class="list-unstyled">
+          <li>
+    
+            <div class="col-12">
+    
+              <a href="{{item.url }}">
+                <h3> {{item.title }}</h3>
+              </a><br />
+              <img *ngIf="item.urlToImage != ''" class="img-thumbnail" src="{{item.urlToImage }}" />
+              <br />
+              {{item.content }} <br />
+              <!-- {{item.description }} <br /> -->
+              <small><b>{{item.publishedAt }}</b>
+                {{item.author }}
+              </small>
+            </div>
+    
+          </li>
+        </ul>
+      </div>
+</div>
