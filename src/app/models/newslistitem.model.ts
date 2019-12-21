@@ -1,4 +1,5 @@
 export class NewsItem {
+    domain: string = "";
     author: string = "";
     content: string = "";
     description: string = "";

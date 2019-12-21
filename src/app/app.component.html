@@ -5,10 +5,14 @@
   </div>
   <h2>Top News: </h2>
   <div class="row">
+    <app-search-box class="col-sm-12">
 
-
-    <app-news-list class="col-sm-12" [domain]="'washingtonpost.com,bbc.com,foxnews.com'" style="background-color:#0000ff12;"></app-news-list>
-    <!-- <app-news-list class="col-sm-4" [domain]="'bbc.com'"></app-news-list>
-    <app-news-list class="col-sm-4" [domain]="''" style="background-color:#ff000014;"></app-news-list> -->
+    </app-search-box>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-sm-{{12/domainsArray.length}}" *ngFor="let item of domainsArray" >
+        <app-news-list [domain]="item" style="background-color:#0000ff12;"></app-news-list>
+    </div>
   </div>
 </div>

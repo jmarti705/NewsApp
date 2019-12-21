@@ -1,6 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { NewsItem } from '../../models/newslistitem.model';
 import { NewsApiService } from '../../services/news-api.service'
+
+import { NewsListItemArray } from '../../models/newslistitemArray.model';
+import { NewsDomain } from '../../models/newsdomain.model';
+import { throttleTime } from 'rxjs/operator/throttleTime';
 
 @Component({
   selector: 'app-news-list',
@@ -11,66 +15,40 @@ import { NewsApiService } from '../../services/news-api.service'
 
 
 export class NewsListComponent implements OnInit {
-  @Input() domain : string = '';
+  @Input() domain: string = '';
+  newsListItemArr = [];
+  newsItem: NewsItem = new NewsItem();
+  newsDomain: NewsDomain = new NewsDomain();
 
-  newsListItemArr: Array<{}> = [];
-  newsItem: NewsItem = {          
-    author:  "",
-    content: "",
-    description: "",
-    publishedAt: "",
-    source: {
-      id: "",
-      name: ""
-    },
-    title: "",
-    url: "",
-    urlToImage: ""
-  };
-    
-
-  constructor( public newsApi: NewsApiService) {}
+  constructor(public newsApi: NewsApiService) { }
 
 
   ngOnInit() {
-    console.log(this.domain);
+    this.updateNewListArr(); 
     this.getSourceNews(this.domain);
-    console.log(this.newsListItemArr);
   }
 
   getTopNewsItems() {
-    this.newsApi.getTopNews().subscribe((data: any) => {
-      console.log(data);
-      data.articles.forEach(newsData => {
-        this.newsItem = newsData;
-        this.newsListItemArr.push(newsData);
-      });
-      return this.newsListItemArr
-    }); 
+
   }
 
+  // Subscribe to the neww articles list to update on changes feom the newsapi service (i.e. .next(data))
+  updateNewListArr() {
+    this.newsApi.newsListItems.subscribe( data => {
+      this.newsListItemArr.push(data);
+
+      this.newsListItemArr = data.filter(newsData => 
+        newsData.source.name == this.newsDomain.sources[this.domain].name
+      );
+    });
+  }
+
+  // get news based on the domains provided via @Input
   getSourceNews(domain) {
-    this.newsApi.getSourceNews(domain).subscribe((data: any) => {
-      console.log(data);
-      data.articles.forEach(newsData => {
-        this.newsItem = newsData;
-        let itemSource : string = this.newsItem.source.name;
-
-        // if(this.newsListItemArr[itemSource] != undefined) {
-        //   this.newsListItemArr[itemSource].push(this.newsItem);
-        // } else {
-        //   this.newsListItemArr[itemSource]= [this.newsItem];
-        //  // this.newsListItemArr.splice(this.newsListItemArr.indexOf(itemSource), 0, this.newsItem);
-        
-        // }
-        this.newsListItemArr.push(this.newsItem);
-      });
-      console.log( this.newsListItemArr);
-     
-      return this.newsListItemArr
-    }); 
+    this.newsApi.getSourceNews(domain, '').subscribe((data: any) => {
+      console.log(data);  
+    });
   }
-
-
 
 }
+

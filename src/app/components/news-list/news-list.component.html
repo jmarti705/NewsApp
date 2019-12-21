@@ -1,74 +1,34 @@
 <div *ngFor="let item of newsListItemArr" class="row">
-  <div *ngIf="item.source.name == 'The Washington Post'" class="col-sm-4">
+  <div class="col-sm-12">
 
 
-    <h2>{{item.source.name}}</h2>
+  
     <ul class="list-unstyled">
       <li>
 
         <div class="col-12">
 
           <a href="{{item.url }}">
-            <h3> {{item.title }}</h3>
-          </a><br />
-          <img *ngIf="item.urlToImage != ''" class="img-thumbnail" src="{{item.urlToImage }}" />
-          <br />
-          {{item.content }} <br />
-          <!-- {{item.description }} <br /> -->
-          <small><b>{{item.publishedAt }}</b>
-            {{item.author }}
-          </small>
-        </div>
+            <h2> {{item.title }}</h2>
+          </a> 
+          <h3>{{item.source.name}}</h3>
+          <div class="">
+            <div class="">
+              <img *ngIf="item.urlToImage != ''" class="img-thumbnail float-left" src="{{item.urlToImage }}" />
+            </div>
 
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="item.source.name == 'Bbc.com'" class="col-sm-4">
-
-
-      <h2>{{item.source.name}}</h2>
-      <ul class="list-unstyled">
-        <li>
-  
-          <div class="col-12">
-  
-            <a href="{{item.url }}">
-              <h3> {{item.title }}</h3>
-            </a><br />
-            <img *ngIf="item.urlToImage != ''" class="img-thumbnail" src="{{item.urlToImage }}" />
-            <br />
-            {{item.content }} <br />
-            <!-- {{item.description }} <br /> -->
-            <small><b>{{item.publishedAt }}</b>
-              {{item.author }}
-            </small>
-          </div>
-  
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="item.source.name == 'Fox News'" class="col-sm-4">
-
-
-        <h2>{{item.source.name}}</h2>
-        <ul class="list-unstyled">
-          <li>
-    
-            <div class="col-12">
-    
-              <a href="{{item.url }}">
-                <h3> {{item.title }}</h3>
-              </a><br />
-              <img *ngIf="item.urlToImage != ''" class="img-thumbnail" src="{{item.urlToImage }}" />
-              <br />
+            <div class="">
               {{item.content }} <br />
               <!-- {{item.description }} <br /> -->
               <small><b>{{item.publishedAt }}</b>
                 {{item.author }}
               </small>
             </div>
-    
-          </li>
-        </ul>
-      </div>
+          </div>
+
+        </div>
+
+      </li>
+    </ul>
+  </div>
 </div>

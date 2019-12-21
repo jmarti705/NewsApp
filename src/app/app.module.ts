@@ -8,12 +8,14 @@ import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { NewsApiService } from '../app/services/news-api.service'
 import { NewsListComponent } from './components/news-list/news-list.component';
+import { SearchBoxComponent } from './components/search-box/search-box.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NewsListComponent
+    NewsListComponent,
+    SearchBoxComponent
   ],
   imports: [
     BrowserModule,

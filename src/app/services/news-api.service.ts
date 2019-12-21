@@ -1,25 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
-import { AggregateTitleService} from '../services/aggregate-title.service'
+import { AggregateTitleService } from '../services/aggregate-title.service'
+
+import { NewsItem } from '../models/newslistitem.model';
+import { NewsListItemArray } from '../models/newslistitemArray.model';
+import { NewsDomain } from '../models/newsdomain.model';
 
 @Injectable()
 
 export class NewsApiService {
 
+  constructor(private http: HttpClient) { }
 
+  newsDomain: NewsDomain = new NewsDomain();
+  newsListItemsArray : NewsItem[] = [];
+  newsListItems = new Subject<NewsItem[]>();
+  newsItem: NewsItem = new NewsItem();
   baseURL: string = 'https://newsapi.org/v2/';
-  apiKey: string = 'API_KEY';
+  apiKey: string = '';
   params: any = {
     'apiKey': this.apiKey,
 
   };
 
-
-  constructor(private http: HttpClient) { }
-
-  aggregateTitleService : AggregateTitleService = '';
+  aggregateTitleService: AggregateTitleService = '';
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -29,23 +35,41 @@ export class NewsApiService {
 
   getTopNews() {
     this.params["country"] = 'us';
-    return this.http.get(this.baseURL + 'top-headlines', {
+    return this.http.get<NewsListItemArray>(this.baseURL + 'top-headlines', {
       params: this.params
     })
-      .pipe(
+      .pipe(map(data => {
+        data.articles.forEach(newsData => {
+          this.newsItem = newsData;
+          this.newsListItemsArray.push(this.newsItem);
+          this.newsListItems.next(this.newsListItemsArray);
+        });
+        return data
+      }),
         catchError(this.handleError)
       )
   }
 
-  getSourceNews(source) {
-    this.params.domains = source;
+  getSourceNews(domain, searchTextStr) {
+    this.newsListItemsArray = [];
+    this.params.domains = domain;
     this.params.language = 'en';
-    return this.http.get( this.baseURL + 'everything', {
-      params : this.params
+    this.params.q = searchTextStr;
+    console.log(searchTextStr);
+    return this.http.get<NewsListItemArray>(this.baseURL + 'everything', {
+      params: this.params
     })
-      .pipe(map(data => { 
-          return data
-        })
+      .pipe(map(data => {
+        data.articles.forEach(newsData => {
+  
+          if(newsData.source.name == this.newsDomain.sources[domain].name) {
+            this.newsListItemsArray.push(newsData);
+            this.newsListItems.next(this.newsListItemsArray);
+          };     
+        });
+        return data
+      }),
+        catchError(this.handleError)
       )
   }
 
